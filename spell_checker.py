@@ -22,6 +22,25 @@ SOUNDEX_TABLE = {'a':-1, 'e':-1, 'h':-1, 'i':-1, 'o':-1, 'u':-1, 'w':-1, 'y':-1,
                 'r':6 }
 
 
+# Returns the soundex code for a given word.
+def getSoundexCode(word):
+    code = word[0]
+
+    for i in xrange(1, len(word) ):
+        if (SOUNDEX_TABLE[word[i]] != -1):
+            if ((str(SOUNDEX_TABLE[word[i]]) != code[-1] )):
+                code += str(SOUNDEX_TABLE[word[i]])
+                
+                if( len(code) >= 4):
+                    return code
+
+    return code
+
+                
+
+
+
+
 def train (words):
     fDist = nltk.FreqDist([w.lower() for w in words])
     return fDist
@@ -118,32 +137,18 @@ def getMaxCost(word_length):
         return 2
 
 
-# Returns the soundex code for a given word.
-def getSoundexCode(word):
-    code = word[0]
-
-    for i in xrange(1, len(word) ):
-        if (SOUNDEX_TABLE[word[i]] != -1):
-            if (SOUNDEX_TABLE[word[i]] != code[-1] ):
-                code += str(SOUNDEX_TABLE[word[i]])
-                
-                if( len(code) >= 4):
-                    return code
-
-    return code
-
-                
-
-
 
 
 trie = TrieNode()
 WordCount = 0
+
+
 # read dictionary file into a trie
 for word in open(DICTIONARY, "rt").read().split():
     WordCount += 1
     trie.insert( word.lower() )
-    
+
+
 print "Read %d words into %d nodes" % (WordCount, NodeCount)
 
 def correct (word1):
@@ -167,6 +172,8 @@ def correct (word1):
 
     #    wtd_candidates = [(word, fDist[word]/count) for (word, count) in results if count != 0]
     suggestions = sorted(results, key=lambda candidate: candidate[1])
+
+    
 
     end = time.time()
         
