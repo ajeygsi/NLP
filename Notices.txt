@@ -1,0 +1,6 @@
+1) The deadline for submission of spell checking programs is 20 Sept, 12 Midnight (i.e 21 Sept 12:00 AM). No further extensions are entertained.
+
+2) You can use any programming language to accomplish the task. The output of the program must be to a file in the format described in the specification. The file must be named output.txt.
+
+3) The sample test cases will be uploaded shortly in a day or two.
+Please go through the specification and if there are any issues, get back to the TAs. 

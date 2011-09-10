@@ -1,0 +1,4 @@
+1. Missing repetition of characters - less edit distance
+2. Extra repeated characters - less edit distance
+Example : embaras --> embarrass
+
