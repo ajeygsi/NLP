@@ -7,11 +7,20 @@ from nltk.corpus import brown
 
 DICTIONARY = "/usr/share/dict/words";
 #TARGET = sys.argv[1]
-MAX_COST = 2
 
 # Keep some interesting statistics
 NodeCount = 0
 #WordCount = 0
+
+# The soundex lookup table.
+SOUNDEX_TABLE = {'a':-1, 'e':-1, 'h':-1, 'i':-1, 'o':-1, 'u':-1, 'w':-1, 'y':-1,
+                'b':1, 'f':1, 'v':1, 'p':1,
+                'c':2, 'g':2, 'j':2, 'k':2, 'q':2, 's':2, 'x':2, 'z':2,
+                'd':3, 't':3,
+                'l':4,
+                'm':5, 'n':5,
+                'r':6 }
+
 
 def train (words):
     fDist = nltk.FreqDist([w.lower() for w in words])
@@ -98,6 +107,36 @@ def searchRecursive( node, lenCurrent, letter, prevLetter, word, previousRow, se
             searchRecursive( node.children[letter1], lenCurrent + 1, letter1, letter, word, currentRow, 
                 previousRow, results, maxCost )
 
+
+# Returns the max distance for a given length.
+def getMaxCost(word_length):
+    if( word_length <= 4):
+        return 1
+    elif( word_length <= 8):
+        return 1.5
+    else:
+        return 2
+
+
+# Returns the soundex code for a given word.
+def getSoundexCode(word):
+    code = word[0]
+
+    for i in xrange(1, len(word) ):
+        if (SOUNDEX_TABLE[word[i]] != -1):
+            if (SOUNDEX_TABLE[word[i]] != code[-1] ):
+                code += str(SOUNDEX_TABLE[word[i]])
+                
+                if( len(code) >= 4):
+                    return code
+
+    return code
+
+                
+
+
+
+
 trie = TrieNode()
 WordCount = 0
 # read dictionary file into a trie
@@ -110,6 +149,8 @@ print "Read %d words into %d nodes" % (WordCount, NodeCount)
 def correct (word1):
     word1 = word1.lower()
     threshold = 50
+
+    # TODO: why are you doing this ?
     training_set = brown.words()
     fDist = train(training_set)
     for word in training_set:
@@ -119,7 +160,11 @@ def correct (word1):
     print max(fDist)
 
     start = time.time()
-    results = search( word1, MAX_COST )
+    
+    # Edit distance based on the length of the word.
+    word_length = len(word1)
+    results = search( word1, getMaxCost(word_length) )
+
     #    wtd_candidates = [(word, fDist[word]/count) for (word, count) in results if count != 0]
     suggestions = sorted(results, key=lambda candidate: candidate[1])
 

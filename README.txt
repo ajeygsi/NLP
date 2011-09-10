@@ -8,3 +8,6 @@ To merge Soundex and edit distance suggestions:
  increasing order of rank of edit distance suggestion before any other suggestion.
 
  Rank remaining suggestions in the same order.
+
+Soundex Algorithm link:
+http://www.sound-ex.com/soundex_method.htm
