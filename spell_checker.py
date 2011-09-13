@@ -7,7 +7,7 @@ from nltk.corpus import brown
 
 DICTIONARY = "/usr/share/dict/words";
 #TARGET = sys.argv[1]
-MAX_COST = 4
+MAX_COST = 2
 
 # Keep some interesting statistics
 NodeCount = 0
@@ -21,6 +21,14 @@ SOUNDEX_TABLE = {'a':-1, 'e':-1, 'h':-1, 'i':-1, 'o':-1, 'u':-1, 'w':-1, 'y':-1,
                 'l':4,
                 'm':5, 'n':5,
                 'r':6 }
+
+# returns simillar sounding charaters to the 'letter'
+def getSimillarSoundCharaters (letter):
+    result = []
+    for key in SOUNDEX_TABLE.keys():
+        if SOUNDEX_TABLE[key] == SOUNDEX_TABLE[letter]:
+            result.append(key)
+    return result
 
 # The Trie data structure keeps a set of words, organized with one node for
 # each letter. Each node has a branch for each letter that may follow it in the
@@ -117,7 +125,8 @@ def search( word, maxCost ):
     results = []
 
     # recursively search each branch of the trie
-    for letter in trie.children:
+    #for letter in trie.children:
+    for letter in getSimillarSoundCharaters(word[0]):
         searchRecursive( trie.children[letter], 1, letter, ' ', word, currentRow, 
             previousRow, results, maxCost )
 
@@ -174,9 +183,9 @@ def getMaxCost(word_length):
     if( word_length <= 4):
         return 1
     elif( word_length <= 8):
-        return 1.5
-    else:
         return 2
+    else:
+        return 3
 
 def correct (word1):
     word1 = word1.lower()
@@ -191,10 +200,13 @@ def correct (word1):
 #    print max(fDist)
 
     start = time.time()
-    results = search( word1, MAX_COST )
+    results = search( word1, getMaxCost(len(word1)) )
 #    wtd_candidates = [(word, fDist[word]/count) for (word, count) in results if count != 0]
+    i = 1
+    while len(results) < 5:
+        results = search( word1, getMaxCost(len(word1)) + i)
+        i = i + 1
     suggestions = sorted(results, key=lambda candidate: candidate[1])
     end = time.time()
     
-    print "Search took %g s" % (end - start)
-    return suggestions
+    return (suggestions, end - start)

@@ -1,0 +1,8 @@
+Mean reciprocal score on file 'commonmisspelledwords.txt' : 0.596776504298
+
+With_first_letter_correct     Test_instance 		Mean_reciprocal_score 	 Avg_time
+1			      test.txt      		0.381944444		 0.860780
+0			      test.txt	    		0.377777777		 5.323539
+
+1			      commonmispelled.txt	0.592406876791		 1.24628433218
+0			      commonmispelled.txt	0.596776504298		 one_can_expect
