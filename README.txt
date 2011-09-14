@@ -11,3 +11,6 @@ To merge Soundex and edit distance suggestions:
 
 Soundex Algorithm link:
 http://www.sound-ex.com/soundex_method.htm
+
+Github reference link:
+http://gitref.org/
