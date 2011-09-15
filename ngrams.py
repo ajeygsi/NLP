@@ -30,27 +30,23 @@ REVERSE_TABLE[0] = N0
 
 
 # The following logic works only for the bigram case.
-sentence = "recent primary election produced no evidence that"
-t_words = sentence.lower().split(' ')
-sentence_length = len(t_words)
+def correctPhrase(phrase, k):
+    phrase = phrase.lower()
+    pwords = phrase.split(' ')
 
-BIGRAM_TABLE = {}               
-for i in xrange(0,sentence_length):
-    BIGRAM_TABLE[t_words[i]] = {}
-    
-
-
-for i in xrange(0,sentence_length):
-    for j in xrange(0,sentence_length):
-
-        c = FreqDist[ (t_words[i],t_words[j]) ]
-
+    prob = 1.0
+    for i in xrange(1, len(pwords)):
+        c = FreqDist[ (pwords[i-1], pwords[i]) ]
         # Good turing adjusted count.
-        c_star = float(c+1) * float(REVERSE_TABLE[c+1]) / float(REVERSE_TABLE[c])
-        BIGRAM_TABLE[t_words[i]][t_words[j]] = c_star
+        if c == 0:
+            c_star = float(REVERSE_TABLE[1]) / float(REVERSE_TABLE[0])
+        elif c > k:
+            c_star = c
+        else:
+            temp = float(k + 1) * float(REVERSE_TABLE[k+1]) / float(REVERSE_TABLE[1])
+            c_star = (float(c+1) * float(REVERSE_TABLE[c+1]) / float(REVERSE_TABLE[c]) - float(c) * temp )/ (1 - temp)
 
+        print i, c_star
+        prob *= c_star
 
-    
-
-            
-
+    return prob
