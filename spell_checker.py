@@ -85,6 +85,11 @@ def train (words):
     fDist = nltk.FreqDist([w.lower() for w in words])
     return fDist
 
+# compute frequency distribution from the training set
+#training_set = brown.words()
+#len_training_set = len(training_set)  # N
+#fDist = train(training_set)
+#lenFDist = len(fDist)  # V
 
 # Returns the soundex code for a given word.
 def getSoundexCode(word):
@@ -190,23 +195,17 @@ def getMaxCost(word_length):
 def correct (word1):
     word1 = word1.lower()
     soundexCode = getSoundexCode(word1)
-#    threshold = 50
-#    training_set = brown.words()
-#    fDist = train(training_set)
-#    for word in training_set:
-#        if (fDist[word] > threshold):
-#            fDist[word] = threshold
-
-#    print max(fDist)
 
     start = time.time()
     results = search( word1, getMaxCost(len(word1)) )
-#    wtd_candidates = [(word, fDist[word]/count) for (word, count) in results if count != 0]
     i = 1
     while len(results) < 5:
         results = search( word1, getMaxCost(len(word1)) + i)
         i = i + 1
+    
+#    wtd_candidates = [(word, float(fDist[word] + 1)/(float(len_training_set + lenFDist) * count)) for (word, count) in results if count != 0]
     suggestions = sorted(results, key=lambda candidate: candidate[1])
+#    edit0words = [(word, count) for (word, count) in results if count == 0]
     end = time.time()
     
     return (suggestions, end - start)

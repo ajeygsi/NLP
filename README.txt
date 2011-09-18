@@ -14,3 +14,7 @@ http://www.sound-ex.com/soundex_method.htm
 
 Github reference link:
 http://gitref.org/
+
+
+For each word, assign categories in which it is present
+Now for each suggestion, match category with the categories of context words.
