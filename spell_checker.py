@@ -70,8 +70,8 @@ def getMatrix (file):
 trie = TrieNode()
 WordCount = 0
 # read dictionary file into a trie
-words = open(DICTIONARY, "rt").read().split()
-for word in words[:-15]:
+dictionary_words = open(DICTIONARY, "rt").read().split()
+for word in dictionary_words[:-15]:
     WordCount += 1
     trie.insert( re.sub(r'\W+', '', word.lower()) )    
 print "Read %d words into %d nodes" % (WordCount, NodeCount)
@@ -192,11 +192,15 @@ def getMaxCost(word_length):
     else:
         return 3
 
+# for dictionary word, give result list of only one word -- done
 def correct (word1):
     word1 = word1.lower()
     soundexCode = getSoundexCode(word1)
 
     start = time.time()
+    if dictionary_words.count(word1) != 0:
+        return [word1]
+
     results = search( word1, getMaxCost(len(word1)) )
     i = 1
     while len(results) < 5:
@@ -208,4 +212,4 @@ def correct (word1):
 #    edit0words = [(word, count) for (word, count) in results if count == 0]
     end = time.time()
     
-    return (suggestions, end - start)
+    return suggestions

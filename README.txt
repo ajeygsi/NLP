@@ -17,4 +17,10 @@ http://gitref.org/
 
 
 For each word, assign categories in which it is present
-Now for each suggestion, match category with the categories of context words.
+Now for each suggestion, match category with the categories of context words. -- 
+Does not work well
+
+Assign tag sequence to each suggested sentence, compute probabilities of resulting
+tag sequences -- done
+Rank that suggestion higher whose sentence has highest probability.
+

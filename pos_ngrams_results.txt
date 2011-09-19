@@ -1,0 +1,40 @@
+<case_id=312>
+    The powre has now shifted to the east.
+</case>
+Suggestions:
+('power', 0.32941176470588235),
+ ('powers', 0.80716352114616341),
+ ('bower', 0.81523650697392358),
+ ('poorer', 0.94496487119437944),
+ ('pore', 1.0)
+
+power, powers, bower, pore -> N =>  1.7124922474257686e-29
+poorer -> ADJ  	      	      	=>  9.597639333412379e-34
+
+
+<case_id=306>
+    In great powrr lies great responsibility.
+</case>
+Suggestions:
+('power', 0.96907216494845361),
+ ('poorer', 1.0597189695550351),
+ ('pour', 1.1821645776162575),
+ ('poor', 1.1834532374100719),
+ ('parr', 1.3827319587628866) 
+
+power, parr -> N  	      => 6.5481328123329691e-25
+poor, poorer -> ADJ	      => 4.1471889243365421e-28
+pour -> VP   		      => 2.9002330660683128e-29
+
+<case_id=309>
+    The crime raet seems to be under control.
+</case>
+Suggestions:
+('rate', 0.47647058823529409),
+ ('read', 0.50515463917525771),
+ ('reed', 0.50515463917525771),
+ ('riot', 0.72809278350515461),
+ ('root', 0.78221649484536082)
+
+rate, reed, riot, root -> N	=> 9.0903980492789848e-26
+read -> VD  	       	  	=> 4.9421226334171892e-29

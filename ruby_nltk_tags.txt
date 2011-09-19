@@ -1,0 +1,30 @@
+CC,IN -> CNJ
+CD -> NUM
+DET,PDT -> DET
+EX -> EX
+FW -> FW
+JJ,JJR,JJS -> ADJ
+LS -> 
+MD -> MOD
+NN,NNP,NNPS,NNS -> N, NP
+POS -> 
+PRP,PRPS -> PRO
+RB,RBR,RBS,RP -> DET, ADV, ADJ
+SYM -> 
+TO -> TO
+UH -> ADV
+VB,VBP -> V
+VBD -> VD
+VBG -> VG
+VBN -> VN
+VBZ -> VBZ
+WDT,WP,WPS,WRB -> WH
+PP -> '.'
+PPC -> ','
+PPL -> '``'
+PPR -> ''', "''"
+PPS -> ':'
+LRB -> '('
+RRB -> ')'
+
+
