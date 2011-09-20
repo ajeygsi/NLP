@@ -4,9 +4,11 @@
 
 import nltk, os, re
 from nltk.corpus import brown # brown corpus used as training data
+import utilities
 
 NUM_OF_BROWN_TAGS = 26
 VOCAB = 49815
+
 # Ruby tags to Brown corpus tags mapping
 ruby_to_brown_tags = {
     'cc': ['CNJ'],
@@ -95,9 +97,12 @@ bigramDist = nltk.FreqDist(bigrams)
 # For error correction, many sentences will be generated
 # in suggestion for given misspelled sentence.
 # The one with the highest probability will be the best suggestion
-def getProbability (test_sentence):
+
+# sentence is a list of words, final '.' is not there
+def getProbabilityOfSentence (sentence):
+    test_sentence = " ".join(sentence)
+    test_sentence += "."
     ruby_call_query = 'ruby pos_tagger.rb "' + test_sentence + '" outfile.txt'
-    print ruby_call_query
     os.system(ruby_call_query)
     
     tagged_test_sent = open('outfile.txt').read()
@@ -109,25 +114,30 @@ def getProbability (test_sentence):
         test_tags.append(srch.group(2).lower())
 
     # generate all possible tag sequences
-    tag_sequences = []
-    for each in ruby_to_brown_tags[test_tags[0]]:
-        tag_sequences.append([each])
+#     tag_sequences = []
+#     for each in ruby_to_brown_tags[test_tags[0]]:
+#         tag_sequences.append([each])
 
-    for tag in test_tags[1:]:
-        lst_corresponding_brown_tags = ruby_to_brown_tags[tag]
-        if (len(lst_corresponding_brown_tags) == 1):
-            for seq in tag_sequences:
-                seq.append(lst_corresponding_brown_tags[0])
-        else:
-            new_sequences = []
-            for seq in tag_sequences:
-                for suggested_tag in lst_corresponding_brown_tags:
-                    new_list = list(seq)
-                    new_list.append(suggested_tag)
-                    new_sequences.append(new_list)
+#     for tag in test_tags[1:]:
+#         lst_corresponding_brown_tags = ruby_to_brown_tags[tag]
+#         if (len(lst_corresponding_brown_tags) == 1):
+#             for seq in tag_sequences:
+#                 seq.append(lst_corresponding_brown_tags[0])
+#         else:
+#             new_sequences = []
+#             for seq in tag_sequences:
+#                 for suggested_tag in lst_corresponding_brown_tags:
+#                     new_list = list(seq)
+#                     new_list.append(suggested_tag)
+#                     new_sequences.append(new_list)
             
-            tag_sequences = list(new_sequences)
+#             tag_sequences = list(new_sequences)
 
+    brown_tags = []
+    for each in test_tags:
+        brown_tags.append(ruby_to_brown_tags[each])
+
+    tag_sequences = utilities.unpackAList(brown_tags)
 
     # rank each generated tag sequence with trigram pos model
     tag_seq_rank = []
@@ -146,3 +156,19 @@ def getProbability (test_sentence):
         tag_seq_rank.append(prob_sent_tag * prob_trigram)
     
     return sum(tag_seq_rank)
+
+# lst_sentence = [['the'], ['power', 'pour', 'powers'], ['is'], ['goad']],
+# only one is multilist
+# returns = ['power', 'powers', 'pour'] -- ranked suggestions
+def correctSentences (lst_suggestions):
+    sentences = utilities.unpackAList(lst_suggestions)
+    tagged_sentences = []
+    for each_sentence in sentences:
+        tag_sent = " ".join(each_sentence)
+        tag_sent += "."
+        ruby_call_query = 'ruby pos_tagger.rb "' + tag_sent + '" outfile.txt'
+        os.system(ruby_call_query)
+        tagged_sentences.append(open('outfile.txt').read())
+
+    
+    

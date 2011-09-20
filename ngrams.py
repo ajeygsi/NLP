@@ -1,42 +1,47 @@
+# Phrase level spell checker
+
 #!/usr/bin/python
 import time
 import sys
 import nltk, time, re
-from nltk.corpus import wordnet as wn
 from nltk.corpus import brown
 
-N = 2
+sents1 = brown.sents()
+sents = []
+for sent in sents1:
+    sents.append([word.lower() for word in sent])
 
-words = []
-for word in brown.words():
-    words.append(word.lower())
-
-ngrams = nltk.ngrams(words,N)
-FreqDist = nltk.FreqDist(ngrams)
+bigrams = []
+for sent in sents:
+    bigrams.extend(nltk.bigrams(sent))
+bigramDist = nltk.FreqDist(bigrams)
 
 # Constructing the reverse table. (fig 6.10 jurafsky martin)
 REVERSE_TABLE = {}
-for key in FreqDist:
-    r_key = FreqDist[key]
+for key in bigramDist:
+    r_key = bigramDist[key]
     if REVERSE_TABLE.has_key(r_key):
         REVERSE_TABLE[r_key] += 1;
     else:
         REVERSE_TABLE[r_key] = 1;
 
 # Calculating the value of N0.
-VOCAB_SIZE = 49815              # computed specifically for the brown corpus.
-N0  = VOCAB_SIZE*VOCAB_SIZE - len(FreqDist)
+VOCAB_SIZE = 49815              # computed specifically for the brown corpus
+N0  = VOCAB_SIZE*VOCAB_SIZE - len(bigramDist)
 REVERSE_TABLE[0] = N0
 
 
 # The following logic works only for the bigram case.
-def correctPhrase(phrase, k):
-    phrase = phrase.lower()
-    pwords = phrase.split(' ')
-
+# phrase is a list of words, does not include '.' if it is a sentence
+# phrase = ['the', 'power', 'is', 'good']
+# k = 100
+# is_sentence = false whenever called for TestCase2, true for others
+def getProbabilityOfPhrase(phrase, k, is_sentence):
+    if is_sentence:
+        phrase.append('.')
     prob = 1.0
-    for i in xrange(1, len(pwords)):
-        c = FreqDist[ (pwords[i-1], pwords[i]) ]
+    for i in xrange(1, len(phrase)):
+        c = bigramDist[ (phrase[i-1], phrase[i]) ]
         # Good turing adjusted count.
         if c == 0:
             c_star = float(REVERSE_TABLE[1]) / float(REVERSE_TABLE[0])
