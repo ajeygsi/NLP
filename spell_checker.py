@@ -4,10 +4,13 @@ import sys
 import nltk, time, re
 from nltk.corpus import wordnet as wn
 from nltk.corpus import brown
+from xml.etree import ElementTree as ET
+
 
 DICTIONARY = "/usr/share/dict/words";
 #TARGET = sys.argv[1]
 MAX_COST = 2
+
 
 # Keep some interesting statistics
 NodeCount = 0
@@ -69,6 +72,7 @@ def getMatrix (file):
 # Global execution, one time executed
 trie = TrieNode()
 WordCount = 0
+
 # read dictionary file into a trie
 dictionary_words = open(DICTIONARY, "rt").read().split()
 for word in dictionary_words[:-15]:
@@ -199,7 +203,7 @@ def correct (word1):
 
     start = time.time()
     if dictionary_words.count(word1) != 0:
-        return [word1]
+        return [(word1, 0)]
 
     results = search( word1, getMaxCost(len(word1)) )
     i = 1
@@ -213,3 +217,5 @@ def correct (word1):
     end = time.time()
     
     return suggestions
+
+
