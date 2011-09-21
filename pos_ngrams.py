@@ -132,7 +132,6 @@ def getProbabilityOfSentence (sentence):
 #                     new_sequences.append(new_list)
             
 #             tag_sequences = list(new_sequences)
-
     brown_tags = []
     for each in test_tags:
         brown_tags.append(ruby_to_brown_tags[each])
@@ -156,3 +155,19 @@ def getProbabilityOfSentence (sentence):
         tag_seq_rank.append(prob_sent_tag * prob_trigram)
     
     return sum(tag_seq_rank)
+
+# lst_sentence = [['the'], ['power', 'pour', 'powers'], ['is'], ['goad']],
+# only one is multilist
+# returns = ['power', 'powers', 'pour'] -- ranked suggestions
+def correctSentences (lst_suggestions):
+    sentences = utilities.unpackAList(lst_suggestions)
+    tagged_sentences = []
+    for each_sentence in sentences:
+        tag_sent = " ".join(each_sentence)
+        tag_sent += "."
+        ruby_call_query = 'ruby pos_tagger.rb "' + tag_sent + '" outfile.txt'
+        os.system(ruby_call_query)
+        tagged_sentences.append(open('outfile.txt').read())
+
+    
+    

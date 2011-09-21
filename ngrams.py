@@ -13,7 +13,7 @@ for sent in sents1:
 
 bigrams = []
 for sent in sents:
-    bigrams.extend(nltk.bigrams(sent[:-1]))   # End of sentence marker '.' does not have much significance in phrases
+    bigrams.extend(nltk.bigrams(sent))
 bigramDist = nltk.FreqDist(bigrams)
 
 # Constructing the reverse table. (fig 6.10 jurafsky martin)
@@ -26,14 +26,19 @@ for key in bigramDist:
         REVERSE_TABLE[r_key] = 1;
 
 # Calculating the value of N0.
-VOCAB_SIZE = 49814              # computed specifically for the brown corpus, '.' is not counted
+VOCAB_SIZE = 49815              # computed specifically for the brown corpus
 N0  = VOCAB_SIZE*VOCAB_SIZE - len(bigramDist)
 REVERSE_TABLE[0] = N0
 
 
 # The following logic works only for the bigram case.
-# phrase is a list of words
-def getProbabilityOfPhrase(phrase, k, p3):
+# phrase is a list of words, does not include '.' if it is a sentence
+# phrase = ['the', 'power', 'is', 'good']
+# k = 100
+# is_sentence = false whenever called for TestCase2, true for others
+def getProbabilityOfPhrase(phrase, k, is_sentence):
+    if is_sentence:
+        phrase.append('.')
     prob = 1.0
     for i in xrange(1, len(phrase)):
         c = bigramDist[ (phrase[i-1], phrase[i]) ]
