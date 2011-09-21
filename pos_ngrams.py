@@ -160,6 +160,7 @@ def getProbabilityOfSentence (sentence):
 # only one is multilist
 # returns = ['power', 'powers', 'pour'] -- ranked suggestions
 def correctSentences (lst_suggestions):
+    return ['suggestion1','suggestion2','suggestion3','suggestion4','suggestion5']
     sentences = utilities.unpackAList(lst_suggestions)
     tagged_sentences = []
     for each_sentence in sentences:
@@ -168,6 +169,8 @@ def correctSentences (lst_suggestions):
         ruby_call_query = 'ruby pos_tagger.rb "' + tag_sent + '" outfile.txt'
         os.system(ruby_call_query)
         tagged_sentences.append(open('outfile.txt').read())
+
+
 
     
     

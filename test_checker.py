@@ -2,7 +2,7 @@ import spell_checker            # Assuming it is in the same directory.
 from xml.etree import ElementTree as ET
 import re
 import utilities
-#import pos_ngrams
+import pos_ngrams
 import ngrams
 
 
@@ -89,37 +89,91 @@ def test(input_file_name,output_file_name):
 
                 temp_list.sort( key = getSecond, reverse=True)
 
-                i = 1
+                j = 1
                 # printing the suggestions.
                 for each_temp in temp_list:
                     outfile.write(", ")
                     outfile.write(each_temp[0])
 
-                    i += 1
-                    if( i > MAX_SUGGESTIONS):
+                    j += 1
+                    if( j > MAX_SUGGESTIONS):
                         outfile.write("\n")
                         break
-        # elif( (subelement.attrib['id'][0] == '3') or (subelement.attrib['id'][0] == '4') ): # testcases3 or 4.xml
-            
-                    
-        # elif( subelement.attrib['id'][0] == '2'): # testcase2.xml
-        #     sentences = subelement.text.split('.')             # dot is the sentence separator.
-            
-        #     for each_sentence in sentences:
-        #         words_in_sentence = regex.findall(each_sentence) # a list is returned.
+
+        # handling the testcases3
+        elif(subelement.attrib['id'][0] == '3'): # testcases3.xml
+            sentence = subelement.text
+
+            words_in_sentence = regex.findall(sentence) # TODO: dot is added here.
+
+            # identifying the incorrect words in the sentence.
+            i = 0;
+            for i in xrange(0,len(words_in_sentence)):
                 
-        #         lolists = []
-        #         for each_word in words_in_sentence:
+                # if it is a punctuations then we should not query the dictionary.
+                if( isPunctuation(words_in_sentence[i])):
+                    continue
+
+                suggestions = spell_checker.correct(words_in_sentence[i])
+                if( len(suggestions) == 1): # correct word.
+                    continue
+
+                outfile.write(subelement.attrib['id'])
+                incorrect_word = words_in_sentence[i]
+                outfile.write(", "+incorrect_word)
+
+                words_in_sentence[i] = suggestions[:MAX_SUGGESTIONS]
+                sorted_suggestions = pos_ngrams.correctSentences(words_in_sentence)
+                
+                j = 1
+                # printing the suggestions.
+                for each_sorted_suggestion in sorted_suggestions:
+                    outfile.write(", ")
+                    outfile.write(each_sorted_suggestion)
+
+                    j += 1
+                    if( j > MAX_SUGGESTIONS):
+                        outfile.write("\n")
+                        break
+
+                
+        # handling the testcases4
+        elif(subelement.attrib['id'][0] == '4'): # testcases4.xml
+
+            sentences = subelement.text.split('.')             # dot is the sentence separator.
+            
+            for each_sentence in sentences:
+                words_in_sentence = regex.findall(each_sentence) # a list is returned.
+                
+                # identifying the incorrect words in the sentence.
+                i = 0;
+                for i in xrange(0,len(words_in_sentence)):
+                
+                    # if it is a punctuations then we should not query the dictionary.
+                    if( isPunctuation(words_in_sentence[i])):
+                        continue
+
+                    suggestions = spell_checker.correct(words_in_sentence[i])
+                    if( len(suggestions) == 1): # correct word.
+                        continue
+
+                    outfile.write(subelement.attrib['id'])
+                    incorrect_word = words_in_sentence[i]
+                    outfile.write(", "+incorrect_word)
+
+                    words_in_sentence[i] = suggestions[:MAX_SUGGESTIONS]
+                    sorted_suggestions = pos_ngrams.correctSentences(words_in_sentence)
                     
-        #             # Check whether the word is present in the dictionary.
-        #             suggestions = spell_checker.correct(each_word)
-        #             new_suggestions = []
-        #             for each_suggestion in suggestions:
-        #                 new_suggestions.append(each_suggestion[0])
-                        
-        #             lolists.append(new_suggestions[:MAX_UNIGRAM_SUGGESTIONS])
-                    
-        #         print lolists
+                    j = 1
+                    # printing the suggestions.
+                    for each_sorted_suggestion in sorted_suggestions:
+                        outfile.write(", ")
+                        outfile.write(each_sorted_suggestion)
+
+                        j += 1
+                        if( j > MAX_SUGGESTIONS):
+                            outfile.write("\n")
+                            break
 
                 
                         
