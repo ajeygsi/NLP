@@ -12,8 +12,8 @@ for line in f:
 meanReciprocalRank = 0
 avgTime = 0.0
 for i in range(len(error)):
-    (suggestions, time) = spell_checker.correct(error[i])
-    avgTime += time
+    suggestions = spell_checker.correct(error[i])
+    #avgTime += time
     reciprocalRank = 0.0
     for j in range(5):
         if suggestions[j][0] == correct[i]:
@@ -22,5 +22,5 @@ for i in range(len(error)):
     meanReciprocalRank += reciprocalRank
     print i
 
-print float(avgTime)/len(error)
+#print float(avgTime)/len(error)
 print float(meanReciprocalRank)/len(error)

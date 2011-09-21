@@ -163,12 +163,22 @@ def getProbabilityOfSentence (sentence):
 def correctSentences (lst_suggestions):
     sentences = utilities.unpackAList(lst_suggestions)
     tagged_sentences = []
+    sent_tags = []
+    sent_words = []
     for each_sentence in sentences:
         tag_sent = " ".join(each_sentence)
         tag_sent += "."
         ruby_call_query = 'ruby pos_tagger.rb "' + tag_sent + '" outfile.txt'
         os.system(ruby_call_query)
-        tagged_sentences.append(open('outfile.txt').read())
+        tagged_sent = open('outfile.txt').read()
+        tagged_sentences.append(tagged_sent)
+        for tagged_word in tagged_sent.split(' '):
+            srch = re.search('<.*>(.*)</(.*)>', tagged_word)
+            test_words.append(srch.group(1).lower())
+            test_tags.append(srch.group(2).lower())
 
+        sent_tags.append(test_tags)
+        sent_words.append(test_words)
+        
     
     
