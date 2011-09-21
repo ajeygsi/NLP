@@ -51,7 +51,7 @@ def getProbabilityOfPhrase(phrase, k, is_sentence):
             temp = float(k + 1) * float(REVERSE_TABLE[k+1]) / float(REVERSE_TABLE[1])
             c_star = (float(c+1) * float(REVERSE_TABLE[c+1]) / float(REVERSE_TABLE[c]) - float(c) * temp )/ (1 - temp)
 
-        print i, c_star
+ #       print i, c_star
         prob *= c_star
 
     return prob

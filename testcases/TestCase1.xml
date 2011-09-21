@@ -1,47 +1,47 @@
 <tests>
-  <case_id=101>
+  <case id="101">
     belive
   </case>
-  <case_id=102>
+  <case id="102">
     bouyant
   </case>
-  <case_id=103>
+  <case id="103">
     comitte
   </case>
-  <case_id=104>
+  <case id="104">
     distarct
   </case>
-  <case_id=105>
+  <case id="105">
     extacy
   </case>
-  <case_id=106>
+  <case id="106">
     failer
   </case>
-  <case_id=107>
+  <case id="107">
     hellpp
   </case>
-  <case_id=108>
+  <case id="108">
     gracefull
   </case>
-  <case_id=109>
+  <case id="109">
     liason
   </case>
-  <case_id=110>
+  <case id="110">
     ocassion
   </case>
-  <case_id=111>
+  <case id="111">
     possable
   </case>
-  <case_id=112>
+  <case id="112">
     thruout
   </case>
-  <case_id=113>
+  <case id="113">
     volly
   </case>
-  <case_id=114>
+  <case id="114">
     tatoos
   </case>
-  <case_id=115>
+  <case id="115">
     respet
   </case>
 </tests>

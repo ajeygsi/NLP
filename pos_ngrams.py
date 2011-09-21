@@ -132,7 +132,6 @@ def getProbabilityOfSentence (sentence):
 #                     new_sequences.append(new_list)
             
 #             tag_sequences = list(new_sequences)
-
     brown_tags = []
     for each in test_tags:
         brown_tags.append(ruby_to_brown_tags[each])
@@ -161,6 +160,7 @@ def getProbabilityOfSentence (sentence):
 # only one is multilist
 # returns = ['power', 'powers', 'pour'] -- ranked suggestions
 def correctSentences (lst_suggestions):
+    return ['suggestion1','suggestion2','suggestion3','suggestion4','suggestion5']
     sentences = utilities.unpackAList(lst_suggestions)
     tagged_sentences = []
     sent_tags = []
@@ -170,6 +170,7 @@ def correctSentences (lst_suggestions):
         tag_sent += "."
         ruby_call_query = 'ruby pos_tagger.rb "' + tag_sent + '" outfile.txt'
         os.system(ruby_call_query)
+<<<<<<< HEAD:pos_ngrams.py
         tagged_sent = open('outfile.txt').read()
         tagged_sentences.append(tagged_sent)
         for tagged_word in tagged_sent.split(' '):
@@ -180,5 +181,11 @@ def correctSentences (lst_suggestions):
         sent_tags.append(test_tags)
         sent_words.append(test_words)
         
+=======
+        tagged_sentences.append(open('outfile.txt').read())
+
+
+
+>>>>>>> origin/master:pos_ngrams.py
     
     
