@@ -5,6 +5,7 @@
 import nltk, os, re
 from nltk.corpus import brown # brown corpus used as training data
 import utilities
+import ngrams
 
 NUM_OF_BROWN_TAGS = 26
 VOCAB = 49815
@@ -156,21 +157,86 @@ def getProbabilityOfSentence (sentence):
     
     return sum(tag_seq_rank)
 
-# lst_sentence = [['the'], ['power', 'pour', 'powers'], ['is'], ['goad']],
+
+# lst_sentences = [['the'], ['power', 'pour', 'powers'], ['is'], ['goad']],
 # only one is multilist
 # returns = ['power', 'powers', 'pour'] -- ranked suggestions
-def correctSentences (lst_suggestions):
-    return ['suggestion1','suggestion2','suggestion3','suggestion4','suggestion5']
-    sentences = utilities.unpackAList(lst_suggestions)
-    tagged_sentences = []
-    for each_sentence in sentences:
-        tag_sent = " ".join(each_sentence)
-        tag_sent += "."
-        ruby_call_query = 'ruby pos_tagger.rb "' + tag_sent + '" outfile.txt'
+def correctSentences (lst_sentences):
+    for i in xrange(0, len(lst_sentences)):
+        if (len(lst_sentences[i]) > 1):
+            break
+
+    list_prefix_words = lst_sentences[:i]
+    list_suffix_words = lst_sentences[i+1:]
+    suggestions = lst_sentences[i]
+
+    suggestion_to_sentence = {}
+    suggestion_pos = {}
+    for each_suggestion in suggestions:
+        sentence = []
+        sentence = [word for [word] in list_prefix_words]
+        sentence.append(each_suggestion)
+        sentence.extend([word for [word] in list_suffix_words])
+        suggestion_to_sentence[each_suggestion] = sentence
+        
+        test_sentence = " ".join(sentence)
+        test_sentence += "."
+        ruby_call_query = 'ruby pos_tagger.rb "' + test_sentence + '" outfile.txt'
         os.system(ruby_call_query)
-        tagged_sentences.append(open('outfile.txt').read())
+        
+        tagged_test_sent = open('outfile.txt').read()
+        test_words = []
+        test_tags = []
+        for tagged_word in tagged_test_sent.split(' '):
+            srch = re.search('<.*>(.*)</(.*)>', tagged_word)
+            test_words.append(srch.group(1).lower())
+            test_tags.append(srch.group(2).lower())
+
+        found = False
+        for ruby_pos in suggestion_pos:
+            if ruby_to_brown_tags[ruby_pos] == ruby_to_brown_tags[test_tags[i]]:
+                suggestion_pos[ruby_pos].append(each_suggestion)
+                found = True
+                break
+                
+        if (found == False):
+            suggestion_pos[test_tags[i]] = [each_suggestion]
 
 
+#    print suggestion_to_sentence
+#    print suggestion_pos
 
-    
-    
+    pos_probability = []
+    for each_pos in suggestion_pos:
+        sentence = []
+        sentence = [word for [word] in list_prefix_words]
+        sentence.append(suggestion_pos[each_pos][0])
+        sentence.extend([word for [word] in list_suffix_words])
+        pos_probability.append((each_pos, getProbabilityOfSentence(sentence)))
+
+#    print pos_probability
+
+    sorted_pos_probability = sorted(pos_probability, key=lambda candidate: -candidate[1])
+#    print sorted_pos_probability
+
+    ranked_suggestions = []
+    for pair in sorted_pos_probability:
+        if len(suggestion_pos[pair[0]]) == 1:
+            ranked_suggestions.append(suggestion_pos[pair[0]][0])
+        else:
+            posssible_suggestions = suggestion_pos[pair[0]]
+            posssible_suggestions_prob = []
+            for each_suggestion in posssible_suggestions:
+                sentence = []
+                sentence = [word for [word] in list_prefix_words]
+                sentence.append(each_suggestion)
+                sentence.extend([word for [word] in list_suffix_words])
+                posssible_suggestions_prob.append((each_suggestion, ngrams.getProbabilityOfPhrase(sentence, 100, True)))
+
+            sorted_possible_suggestions_prob = sorted(posssible_suggestions_prob, key=lambda candidate: -candidate[1])
+            for each in sorted_possible_suggestions_prob:
+                ranked_suggestions.append(each[0])
+                
+#            print sorted_possible_suggestions_prob
+
+    return ranked_suggestions
