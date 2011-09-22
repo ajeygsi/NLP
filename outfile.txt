@@ -1,1 +1,1 @@
-<det>the</det> <nns>powers</nns> <vbz>is</vbz> <jj>good</jj> <pp>.</pp>
+<wp>Who</wp> <vbd>said</vbd> <prp>it</prp> <vbz>is</vbz> <jj>difficult</jj> <ppc>,</ppc> <prp>it</prp> <vbz>is</vbz> <rb>impossibly</rb> <pp>.</pp>

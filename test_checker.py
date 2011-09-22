@@ -118,12 +118,23 @@ def test(input_file_name,output_file_name):
                 if( len(suggestions) == 1): # correct word.
                     continue
 
+                # patch.
+                for k in xrange(0,len(suggestions)):
+                    suggestions[k] = suggestions[k][0]
+
+
                 outfile.write(subelement.attrib['id'])
                 incorrect_word = words_in_sentence[i]
                 outfile.write(", "+incorrect_word)
 
-                words_in_sentence[i] = suggestions[:MAX_SUGGESTIONS]
-                sorted_suggestions = pos_ngrams.correctSentences(words_in_sentence)
+                # creating a new list to call the correctSentences function.
+                aux_list = []
+                for t in xrange(0,(len(words_in_sentence)-1)):
+                    aux_list.append([words_in_sentence[t]])
+                    
+                aux_list[i] = suggestions[:MAX_SUGGESTIONS]
+                print aux_list
+                sorted_suggestions = pos_ngrams.correctSentences(aux_list)
                 
                 j = 1
                 # printing the suggestions.
@@ -157,12 +168,22 @@ def test(input_file_name,output_file_name):
                     if( len(suggestions) == 1): # correct word.
                         continue
 
+                    # patch.
+                    for k in xrange(0,len(suggestions)):
+                        suggestions[k] = suggestions[k][0]
+
                     outfile.write(subelement.attrib['id'])
                     incorrect_word = words_in_sentence[i]
                     outfile.write(", "+incorrect_word)
 
-                    words_in_sentence[i] = suggestions[:MAX_SUGGESTIONS]
-                    sorted_suggestions = pos_ngrams.correctSentences(words_in_sentence)
+                    # creating a new list to call the correctSentences function.
+                    aux_list = []
+                    for t in xrange(0,len(words_in_sentence)):
+                        aux_list.append([words_in_sentence[t]])
+                        
+                    aux_list[i] = suggestions[:MAX_SUGGESTIONS]
+                    print aux_list
+                    sorted_suggestions = pos_ngrams.correctSentences(aux_list)
                     
                     j = 1
                     # printing the suggestions.
