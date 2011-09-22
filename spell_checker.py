@@ -85,15 +85,15 @@ substituteConfusionMat = getMatrix('substitute.txt')
 transposeConfusionMat = getMatrix('transpose.txt')
 
 # Computes frequency distribution of each word in given training set
-def train (words):
-    fDist = nltk.FreqDist([w.lower() for w in words])
-    return fDist
+# def train (words):
+#     fDist = nltk.FreqDist([w.lower() for w in words])
+#     return fDist
 
 # compute frequency distribution from the training set
-#training_set = brown.words()
-#len_training_set = len(training_set)  # N
-#fDist = train(training_set)
-#lenFDist = len(fDist)  # V
+# training_set = brown.words()
+# len_training_set = len(training_set)  # N
+# fDist = train(training_set)
+# lenFDist = len(fDist)  # V
 
 # Returns the soundex code for a given word.
 def getSoundexCode(word):
@@ -201,20 +201,23 @@ def correct (word1):
     word1 = word1.lower()
     soundexCode = getSoundexCode(word1)
 
-    start = time.time()
+#    start = time.time()
     if dictionary_words.count(word1) != 0:
         return [(word1, 0)]
 
     results = search( word1, getMaxCost(len(word1)) )
-    i = 1
+    i = getMaxCost(len(word1))
     while len(results) < 5:
-        results = search( word1, getMaxCost(len(word1)) + i)
+        results = search( word1, i + 1)
         i = i + 1
     
-#    wtd_candidates = [(word, float(fDist[word] + 1)/(float(len_training_set + lenFDist) * count)) for (word, count) in results if count != 0]
+#    edit0words = [(word, count) for (word, count) in results if count == 0.0]
+#    print edit0words
+#    sorted_results = sorted(results, key=lambda candidate: candidate[1])
+#    normalized_words = [(word, 1.0 - count/float(i)) for (word, count) in sorted_results[:20]]
+#    wtd_candidates = [(word, count * float(fDist[word] + 1)/float(len_training_set + lenFDist)) for (word, count) in normalized_words]
     suggestions = sorted(results, key=lambda candidate: candidate[1])
-#    edit0words = [(word, count) for (word, count) in results if count == 0]
-    end = time.time()
+#    end = time.time()
     
     return suggestions
 

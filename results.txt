@@ -6,3 +6,5 @@ With_first_letter_correct     Test_instance 		Mean_reciprocal_score 	 Avg_time
 
 1			      commonmispelled.txt	0.592406876791		 1.24628433218
 0			      commonmispelled.txt	0.596776504298		 one_can_expect
+
+After considering frequency of each word in training corpus, mean reciprocal score = 0.45253
